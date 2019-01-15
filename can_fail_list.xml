@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+    <testcase>test_tc1</testcase>
+    <testcase>test_tc2</testcase>
+    <testcase>test_tc31</testcase>
+    <testcase>test_tc42</testcase>
+</testsuites>
