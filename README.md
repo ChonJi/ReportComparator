@@ -5,5 +5,4 @@ Application for test reports comparision. Using GitLab API it downloads report a
 type pip install -r requirements.txt
 
 # Run
-Manipulate articact_id variable, change url to better fit to your GitLab Project.
-Run Checker.py
+Run ComparatorRunner.class

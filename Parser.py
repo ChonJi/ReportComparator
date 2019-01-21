@@ -1,32 +1,39 @@
-from ReportProvider import ReportProvider
 import xml.etree.ElementTree as element_tree
 
+from ReportProvider import ReportProvider
+
+
 class Parser:
+    __list_of_lists__ = []
 
-    def __init__(self, artifact_id):
-        ReportProvider(artifact_id)
+    def __init__(self):
+        pass
 
-    def get_actual_failures(self):
+    def get_tc_names(self):
 
-        test_cases_list = []
-        tree = element_tree.parse('actual_report.xml')
-        for parent in tree.findall('.//failure/..'):
-            test_cases_list.append(parent.attrib['name'])
-        return test_cases_list
-
-    def get_accepted_failures(self):
-
-        accepted_failures_list = []
-        tree = element_tree.parse('can_fail_list.xml')
+        test_cases_names_list = []
+        tree = element_tree.parse('report/output1.xml')
         root = tree.getroot()
-        for failure in root.iter('testcase'):
-            accepted_failures_list.append(failure.text)
-        return accepted_failures_list
+        for name in root.findall('.//test'):
+            test_cases_names_list.append(name.attrib['name'])
+        return test_cases_names_list
 
-    def compare_failures(self):
+    def get_tc_status(self):
+        print()
+        names = self.get_tc_names()
+        self.__list_of_lists__.append(names)
+        statuses_list = []
+        for i in range(2):
+            tree = element_tree.parse(f'report/output{i + 1}.xml')
+            root = tree.getroot()
+            for i, name in enumerate(names):
+                statuses_list.append(root.findall(f".//*[@name='{names[i]}']//status")[0].attrib['status'])
+            self.__list_of_lists__.append(statuses_list)
 
-        differences_list = []
-        for element in self.get_actual_failures():
-            if element not in self.get_accepted_failures():
-                differences_list.append(element)
-        return differences_list
+        return self.__list_of_lists__
+
+p = Parser()
+for v in zip(*p.get_tc_status()):
+    print(*v)
+
+
