@@ -10,7 +10,7 @@ class ReportProvider:
 
     def __init__(self):
         driver = DriverGetJobsId()
-        self.__artifact_id_list__ = driver.test_build_job_id_list()
+        self.__artifact_id_list__ = driver.build_job_id_list()
         shutil.rmtree('/report', ignore_errors=True)
         os.mkdir('report')
         for index, id in enumerate(self.__artifact_id_list__):
