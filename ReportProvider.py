@@ -1,4 +1,6 @@
 import urllib.request
+import shutil
+import os
 
 from DriverGetJobsId import DriverGetJobsId
 
@@ -8,10 +10,12 @@ class ReportProvider:
 
     def __init__(self):
         driver = DriverGetJobsId()
-        self.__artifact_id_list__ = driver.test_build_job_id_list()[0:2]
-
+        self.__artifact_id_list__ = driver.test_build_job_id_list()
+        shutil.rmtree('/report', ignore_errors=True)
+        os.mkdir('report')
         for index, id in enumerate(self.__artifact_id_list__):
-            url = f"https://gitlab.com/ChonJi1983/TestRun/-/jobs/{self.__artifact_id_list__[index]}/artifacts/raw/results.xml"
+            #https://gitlab.com/ChonJi1983/TestRun/-/jobs/{self.__artifact_id_list__[index]}/artifacts/raw/results.xml
+            url = f"https://novgit05.novero.com/skateblack/CarIF/CarIF_SW/-/jobs/{id}/artifacts/raw/output.xml"
             urllib.request.urlretrieve(url, f'report/output{index + 1}.xml')
 
     def get_length_artifacts_id_list(self):

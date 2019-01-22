@@ -1,39 +1,44 @@
-import xml.etree.ElementTree as element_tree
-
+import xml.etree.ElementTree as ET
+import os
 from ReportProvider import ReportProvider
 
-
 class Parser:
-    __list_of_lists__ = []
+    def __init__(self, temp_dir):
+        """
+        :param temp_dir: path to temporary directory that contains xml files
+        """
+        self.logs_paths = self.get_logs_paths(temp_dir)
+        self.parsed_logs = self.parse_logs(self.logs_paths)
 
-    def __init__(self):
-        pass
+    def get_logs_paths(self, path):
+        return [os.path.join(path, file) for file in os.listdir(path) if file.endswith('.xml')]
 
-    def get_tc_names(self):
+    def parse_logs(self, logs):
+        return [self.parse_log(f) for f in logs]
 
-        test_cases_names_list = []
-        tree = element_tree.parse('report/output1.xml')
-        root = tree.getroot()
-        for name in root.findall('.//test'):
-            test_cases_names_list.append(name.attrib['name'])
-        return test_cases_names_list
+    def parse_log(self, filename):
+        """
+        Parse xml log. It is assumed that log is in folllowing format:
+        <suite>
+            <suite name="test1"><status status="PASS" /></suite>
+            <suite name="test2"><status status="FAIL"/></suite>
+        </suite>
+        :param filename: path to xml log file
+        :return:
+            Dictionary with test_name: status key:value pairs. Example:
+            {test1: PASS, test2: FAIL}
+        :raises:
+             xml.etree.ElementTree.ParseError - general parse error
+        """
+        try:
+            root = ET.parse(filename).getroot()
+            ret = {}
+            for suite in root.findall('suite/suite'):
+                ret[suite.find('test').attrib['name']] = suite.find('status').attrib['status']
+            return ret
+        except ET.ParseError as e:
+            print(e)
+            raise
 
-    def get_tc_status(self):
-        print()
-        names = self.get_tc_names()
-        self.__list_of_lists__.append(names)
-        statuses_list = []
-        for i in range(2):
-            tree = element_tree.parse(f'report/output{i + 1}.xml')
-            root = tree.getroot()
-            for i, name in enumerate(names):
-                statuses_list.append(root.findall(f".//*[@name='{names[i]}']//status")[0].attrib['status'])
-            self.__list_of_lists__.append(statuses_list)
-
-        return self.__list_of_lists__
-
-p = Parser()
-for v in zip(*p.get_tc_status()):
-    print(*v)
 
 
