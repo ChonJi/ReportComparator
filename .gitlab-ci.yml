@@ -1,0 +1,21 @@
+stages:
+    - build
+    - run
+cache:
+    paths:
+    
+builds:
+    image: python:latest
+    stage: build
+    script:
+        - pip install --upgrade pip
+        - pip install -r requirements.txt
+     
+getJobAndPipelinesIDs:
+    stage: run
+    script:
+        - python -m ComparatorRunner.py
+    artifacts:
+        paths:
+        - .\report\*
+    
