@@ -1,4 +1,4 @@
-from ReportProvider import ReportProvider
+from report_provider import ReportProvider
 from Parser import Parser
 
 

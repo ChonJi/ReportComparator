@@ -10,7 +10,7 @@ class ReportProvider:
         driver = DriverGetJobsId()
         self.__artifact_id_list__ = driver.get_job_ids_with_pipelines(pipeline=23552)
         #shutil.rmtree('/report', ignore_errors=True)
-        os.mkdir('report')
+        #os.mkdir('report')
         for index, (job_id, pipeline) in enumerate(self.__artifact_id_list__):
         #" 4Rfsax-rdMN5Cpmiym6Z  oza_geyUkXm-iC8ZFxgx   id project 1134
             url = f"https://novgit05.novero.com/api/v4/projects/1134/jobs/{job_id}/artifacts/Reports/output.xml?private_token=oza_geyUkXm-iC8ZFxgx"
