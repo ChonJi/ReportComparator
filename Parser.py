@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 import os
-from ReportProvider import ReportProvider
 
 class Parser:
     def __init__(self, temp_dir):
