@@ -1,6 +1,7 @@
 import urllib.request
 import shutil
 import os
+import requests
 
 from DriverGetJobsId import DriverGetJobsId
 
@@ -10,13 +11,18 @@ class ReportProvider:
 
     def __init__(self):
         driver = DriverGetJobsId()
-        self.__artifact_id_list__ = driver.build_job_id_list()
-        shutil.rmtree('/report', ignore_errors=True)
-        os.mkdir('report')
-        for index, id in enumerate(self.__artifact_id_list__):
-            #https://gitlab.com/ChonJi1983/TestRun/-/jobs/{self.__artifact_id_list__[index]}/artifacts/raw/results.xml
-            url = f"https://novgit05.novero.com/skateblack/CarIF/CarIF_SW/-/jobs/{id}/artifacts/raw/output.xml"
-            urllib.request.urlretrieve(url, f'report/output{index + 1}.xml')
+        self.__artifact_id_list__ = driver.get_job_ids_with_pipelines(pipeline=23552)
+        #shutil.rmtree('/report', ignore_errors=True)
+        #os.mkdir('report')
+        for index, (job_id, pipeline) in enumerate(self.__artifact_id_list__):
+        #" 4Rfsax-rdMN5Cpmiym6Z  oza_geyUkXm-iC8ZFxgx   id project 1134
+            url = f"https://novgit05.novero.com/api/v4/projects/1134/jobs/{job_id}/artifacts/Reports/output.xml?private_token=oza_geyUkXm-iC8ZFxgx"
+            r = requests.get(url)
+            if r.status_code!=200:
+                print(f"Job: {job_id} from pipeline: {pipeline} failed to return artifacts")
+                continue
+            with open(f'report/output{pipeline}.xml', 'w',  encoding='utf-8') as f:
+                f.write(r.text)
 
     def get_length_artifacts_id_list(self):
         return len(self.__artifact_id_list__)

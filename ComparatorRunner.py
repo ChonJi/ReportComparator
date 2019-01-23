@@ -1,4 +1,4 @@
-from DriverGetJobsId import DriverGetJobsId
+from ReportProvider import ReportProvider
 from Parser import Parser
 
 
@@ -84,6 +84,7 @@ class ComparatorRunner:
         return s
 
 if __name__ == "__main__":
+    ReportProvider()
     c = ComparatorRunner(['SKTB-55194', 'SKTB-31396 Chorus SW Flashing'])
     print(c)
     print(c.overview_to_str(c.overview))
