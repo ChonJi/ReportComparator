@@ -18,7 +18,7 @@ selenium==3.11.0
 six==1.12.0
 unittest-xml-reporting==2.2.1
 UNKNOWN==0.0.0
-urllib3==1.24.1
+urllib3==1.24.2
 waiting==1.4.1
 webium==1.2.1
 xmltodict==0.11.0
