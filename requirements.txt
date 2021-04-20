@@ -11,7 +11,7 @@ idna==2.8
 lib==3.0.0
 more-itertools==5.0.0
 pluggy==0.8.1
-py==1.7.0
+py==1.10.0
 pytest==4.1.1
 requests==2.21.0
 selenium==3.11.0
